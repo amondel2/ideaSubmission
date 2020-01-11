@@ -1,3 +1,4 @@
+<g:set var='securityConfig' value='${applicationContext.springSecurityService.securityConfig}'/>
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -15,7 +16,10 @@
 </head>
 
 <body>
-
+<span id="logoutLink" style="display:none">
+    <g:link elementId='_logout' controller='logout'/>
+    <a href="${request.contextPath}${securityConfig.logout.afterLogoutUrl}" id="_afterLogout"></a>
+</span>
 <nav class="navbar navbar-expand-lg navbar-dark navbar-static-top" role="navigation">
     <a class="navbar-brand" href="/#"><asset:image src="grails.svg" alt="Grails Logo"/></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +29,9 @@
     <div class="collapse navbar-collapse" aria-expanded="false" style="height: 0.8px;" id="navbarContent">
         <ul class="nav navbar-nav ml-auto">
             <g:pageProperty name="page.nav"/>
+            <sec:ifLoggedIn>
+                <li class="dropdown vert_center"><g:link controller="logout" class="nav-link vert_center" aria-haspopup="true" aria-expanded="false" elementId="logout"><g:message code='spring.security.ui.login.logout'/></g:link></li>
+            </sec:ifLoggedIn>
         </ul>
     </div>
 
@@ -65,6 +72,26 @@
 </div>
 
 <asset:javascript src="application.js"/>
+<sec:ifLoggedIn>
+    <script>
 
+        function logout(event) {
+            event.preventDefault();
+            $.ajax({
+                url: $("#_logout").attr("href"),
+                method: "post",
+                success: function (data, textStatus, jqXHR) {
+                    window.location = $("#_afterLogout").attr("href");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Logout error, textStatus: " + textStatus + ", errorThrown: " + errorThrown);
+                }
+            });
+        }
+        $(document).ready(function() {
+            $("#logout").click(logout);
+        });
+    </script>
+</sec:ifLoggedIn>
 </body>
 </html>

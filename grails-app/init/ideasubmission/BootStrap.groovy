@@ -34,6 +34,7 @@ class BootStrap {
                 ua.enabled = true
                 ua.accountExpired = false
                 ua.accountExpired = false
+                ua.email = "ideaadmin@reedtech.com"
                 ua.save()
             }
         }
@@ -46,6 +47,7 @@ class BootStrap {
                 uu.enabled = true
                 uu.accountExpired = false
                 uu.accountExpired = false
+                uu.email = "amondelblatt@reedtech.com"
                 uu.save()
             }
         }

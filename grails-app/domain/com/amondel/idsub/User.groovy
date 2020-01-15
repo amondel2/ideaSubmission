@@ -2,48 +2,39 @@ package com.amondel.idsub
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
-import grails.compiler.GrailsCompileStatic
 
+@EqualsAndHashCode(includes = 'username')
+@ToString(includes = 'username', includeNames = true, includePackage = false)
+class User extends AbstractDomainObject {
 
-@EqualsAndHashCode(includes='username')
-@ToString(includes='username', includeNames=true, includePackage=false)
-class User implements Serializable {
-
-    def utilService = Utils.getInstance()
-    private static final long serialVersionUID = 1
-
-    String id
     String username
     String password
     boolean enabled = true
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
+    String restToken
+    String email
 
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
     }
 
+    static hasMany = [votes:IdeaVotes]
+
     static constraints = {
-        password nullable: false, blank: false, password: true
+        id nullable: false, unique: true
+        password nullable: false, blank: false, password: true, display: false
         username nullable: false, blank: false, unique: true
-    }
-
-    def beforeValidate() {
-        if(!id || id.equals(null)) {
-            id  = utilService.idGenerator()
-        }
-    }
-
-    def beforeInsert() {
-        if(!id || id.equals(null)) {
-            id  = utilService.idGenerator()
+        restToken nullable: true, blank: true, unique: true, display: false
+        email nullable: false, blank: false, email: true, unique: true, validator: {
+            return (it.trim().toLowerCase().endsWith('@reedtech.com'))
         }
     }
 
 
     static mapping = {
         id generator: 'assigned'
-	    password column: '`password`'
+        password column: '`password`'
     }
 }

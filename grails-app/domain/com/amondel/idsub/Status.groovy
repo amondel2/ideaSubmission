@@ -1,9 +1,6 @@
 package com.amondel.idsub
 
-class Status implements Serializable {
-
-    def utilService = Utils.getInstance()
-    private static final serialVersionUID = 1L
+class Status extends AbstractDomainObject {
 
     static constraints = {
     }
@@ -13,24 +10,12 @@ class Status implements Serializable {
         version false
     }
 
-    def beforeValidate() {
-        if(!id || id.equals(null)) {
-            id  = utilService.idGenerator()
-        }
-    }
-
-    def beforeInsert() {
-        if(!id || id.equals(null)) {
-            id  = utilService.idGenerator()
-        }
-    }
-
     @Override
-    public String toString(){
+    String toString() {
         return this.name
     }
 
-    static hasMany = [ideas:Idea]
-    String id
+    static hasMany = [ideas: Idea]
+
     String name
 }

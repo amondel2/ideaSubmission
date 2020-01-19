@@ -75,8 +75,11 @@ dependencies {
     testCompile "org.seleniumhq.selenium:selenium-support:3.14.0"
     testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:3.14.0"
     testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:3.14.0"
-    runtime 'mysql:mysql-connector-java:8.0.15'
+//    runtime 'mysql:mysql-connector-java:8.0.15'
+    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.3'
+
     compile 'org.grails.plugins:spring-security-core:4.0.0.RC3'
+    compile 'org.grails.plugins:grails-melody-plugin:1.80.0'
 }
 
 bootRun {
@@ -90,10 +93,22 @@ bootRun {
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
+tasks.withType(War) {
+    doLast {
+        exec {
+            executable './release.sh'
+        }
+    }
+}
 
 assets {
     minifyJs = true
     minifyCss = true
+    minifyOptions = [
+            languageMode: 'ES6',
+            targetLanguage: 'ES6', //Can go from ES6 to ES5 for those bleeding edgers
+            optimizationLevel: 'WHITESPACE_ONLY' //Or ADVANCED or WHITESPACE_ONLY
+    ]
 }
 
 webdriverBinaries {

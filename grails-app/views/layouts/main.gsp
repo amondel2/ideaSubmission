@@ -11,7 +11,7 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 
     <asset:stylesheet src="application.css"/>
-
+    <asset:javascript src="application.js"/>
     <g:layoutHead/>
 </head>
 
@@ -71,27 +71,6 @@
     <g:message code="spinner.alt" default="Loading&hellip;"/>
 </div>
 
-<asset:javascript src="application.js"/>
-<sec:ifLoggedIn>
-    <script>
 
-        function logout(event) {
-            event.preventDefault();
-            $.ajax({
-                url: $("#_logout").attr("href"),
-                method: "post",
-                success: function (data, textStatus, jqXHR) {
-                    window.location = $("#_afterLogout").attr("href");
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log("Logout error, textStatus: " + textStatus + ", errorThrown: " + errorThrown);
-                }
-            });
-        }
-        $(document).ready(function() {
-            $("#logout").click(logout);
-        });
-    </script>
-</sec:ifLoggedIn>
 </body>
 </html>

@@ -12,6 +12,21 @@ class UserService {
         emp.save(flush:true)
     }
 
+    def getIdeas(User u) {
+        u.ideas.collect{
+            ['title':it.title,'votes':it.votes.size()]
+        }
+    }
+
+    def getLatestIdeas() {
+        def cc = Idea.createCriteria()
+        def sessions = cc.list (max: 20, offset: 0, sort: 'dateCreated', order: 'dateCreaated') {
+
+         }.collect{
+            ['title':it.title,'votes':it.votes.size(),'creaated':it.dateCreated]
+        }
+    }
+
     Boolean createUser(RegisterCommand registerCommand){
         User u = new User()
         u.email = registerCommand.email

@@ -20,7 +20,7 @@ class User extends AbstractDomainObject {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
     }
 
-    static hasMany = [votes:IdeaVotes]
+    static hasMany = [votes:IdeaVotes,ideas:Idea]
 
     static constraints = {
         id nullable: false, unique: true

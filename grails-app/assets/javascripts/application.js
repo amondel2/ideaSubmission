@@ -9,3 +9,18 @@
 //= require bootstrap
 //= require popper.min
 //= require_self
+$(document).ready(function(){
+    function logout(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $("#_logout").attr("href"),
+            method: "POST"
+        }).done(function(){
+            window.location = $("#_afterLogout").attr("href");
+        }).fail(function(jqXHR, textStatus, errorThrown){
+            alert("Couldn't Logout");
+            console.log("Logout error, textStatus: " + textStatus + ", errorThrown: " + errorThrown);
+        });
+    }
+    $("#logout").on('click',logout);
+});
